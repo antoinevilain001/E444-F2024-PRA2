@@ -40,3 +40,6 @@ nosetests.xml
 
 # Virtual environment
 venv
+
+# Docker app
+my_app
