@@ -3,8 +3,8 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, EmailField, SubmitField
+from wtforms.validators import DataRequired, Email, ValidationError
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
@@ -25,7 +25,12 @@ def internal_server_error(e):
 
 class NameForm(FlaskForm):
     name = StringField('What is your name?', validators=[DataRequired()])
+    email = EmailField('What is your UofT email?', validators=[DataRequired(), Email()])
     submit = SubmitField('Submit')
+
+    def validate_email(self, email):
+        if 'utoronto' not in email.data:
+            raise ValidationError('Email must contain "utoronto".')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -35,8 +40,9 @@ def index():
         if old_name is not None and old_name != form.name.data:
             flash('Looks like you have changed your name!')
         session['name'] = form.name.data
+        session['email'] = form.email.data
         return redirect(url_for('index'))
-    return render_template('index.html', current_time=datetime.utcnow(), form = form, name = session.get('name'))
+    return render_template('index.html', current_time=datetime.utcnow(), form = form, name = session.get('name'), email = session.get('email'))
 
 
 @app.route('/user/<name>')
