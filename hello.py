@@ -26,11 +26,8 @@ def internal_server_error(e):
 class NameForm(FlaskForm):
     name = StringField('What is your name?', validators=[DataRequired()])
     email = EmailField('What is your UofT email?', validators=[DataRequired(), Email()])
+    utoronto_in_email = False
     submit = SubmitField('Submit')
-
-    def validate_email(self, email):
-        if 'utoronto' not in email.data:
-            raise ValidationError('Email must contain "utoronto".')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
