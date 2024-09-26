@@ -8,7 +8,7 @@
     <h1><b>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}! Welcome to PRA2 Docker!</b></h1>
     {% if email %}
     <h1><b>
-        {% if 'utoronto' in email %}
+        {% if 'utoronto' in email.split("@")[1] %}
             Your UofT email is {{ email }}
         {% else %}
             Please use your UofT email.
