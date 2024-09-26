@@ -16,5 +16,8 @@ COPY . .
 # Expose the necessary port
 EXPOSE 5000
 
+# Set the environment variable
+ENV FLASK_APP=hello.py
+
 # Command to run your application
-CMD ["flask", "run"]  # Change app.py to your main application file
+CMD ["flask", "run", "--host=0.0.0.0"]
